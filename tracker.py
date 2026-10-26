@@ -1,11 +1,10 @@
-import time
 import requests
 from bs4 import BeautifulSoup
 
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
 CHAT = "5124680786"
 
-# استبدلنا رابط المتجر برابط بحث مباشر لديفاكتو (HTML بيظهر فيه كل المنتجات مباشرة)
+# رابط بحث مباشر لديفاكتو
 SEARCH_URL = "https://www.amazon.eg/s?k=defacto"
 
 H = {
@@ -15,8 +14,6 @@ H = {
 }
 
 AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
-
-last_prices = {}
 
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -31,7 +28,7 @@ def clean(text):
     return float(x) if x else None
 
 def check_search_page():
-    print(f"[{time.strftime('%H:%M:%S')}] جاري فحص صفحة منتجات ديفاكتو...")
+    print("جاري فحص صفحة منتجات ديفاكتو...")
     try:
         r = requests.get(SEARCH_URL, headers=H, timeout=25)
         if r.status_code != 200:
@@ -39,21 +36,17 @@ def check_search_page():
             return
             
         s = BeautifulSoup(r.text, "html.parser")
-        
-        # كروت المنتجات في صفحة البحث بتبقى واضحة جداً بالـ selector ده
         items = s.select("div.s-result-item[data-asin]")
         
         found_count = 0
         for item in items:
             asin = item.get("data-asin")
-            if not asin or len(asin) != 10: # التأكد إنه ASIN حقيقي وصحيح
+            if not asin or len(asin) != 10:
                 continue
                 
-            # استخراج اسم المنتج
             name_tag = item.select_one("h2 a span, .a-text-normal")
             name = name_tag.get_text(strip=True) if name_tag else f"منتج {asin}"
             
-            # استخراج السعر
             price_tag = item.select_one(".a-price-whole")
             if not price_tag:
                 continue
@@ -63,34 +56,17 @@ def check_search_page():
                 continue
                 
             product_link = f"https://www.amazon.eg/dp/{asin}"
-            old_price = last_prices.get(asin)
             
-            if old_price is None:
-                last_prices[asin] = price
-                print(f"تم رصد منتج: {name[:25]}... بسعر {price}")
-            elif price != old_price:
-                diff = price - old_price
-                ar = "📉 نزل" if diff < 0 else "📈 زاد"
-                msg = (
-                    f"🚨 *تغيير سعر لمنتج DeFacto!*\n\n"
-                    f"🛒 [{name}]({product_link})\n"
-                    f"الحالة: {ar}\n"
-                    f"من: `~{old_price}~ ج.م`\n"
-                    f"إلى: *{price} ج.م*"
-                )
-                send(msg)
-                print(f"تغير سعر {asin} من {old_price} إلى {price}")
-                last_prices[asin] = price
-            
+            # طباعة وتنبيه تجريبي للفحص
+            print(f"تم رصد منتج: {name[:25]}... بسعر {price}")
             found_count += 1
             
         print(f"تم فحص {found_count} منتج بنجاح.")
+        send(f"🟢 *تم فحص أمازون بنجاح*\nتم العثور وفحص {found_count} منتج لـ DeFacto.")
 
     except Exception as e:
         print("خطأ أثناء فحص الصفحة:", e)
 
-print("مراقبة بحث ديفاكتو شغالة...")
-while True:
-    check_search_print = check_search_page()
-    print("انتظار اللفة القادمة...")
-    time.sleep(1800)
+if __name__ == "__main__":
+    check_search_page()
+    
