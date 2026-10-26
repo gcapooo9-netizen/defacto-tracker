@@ -1,9 +1,9 @@
 import requests
+import time
 from bs4 import BeautifulSoup
 
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
 CHAT = "5124680786"
-
 SEARCH_URL = "https://www.amazon.eg/s?k=defacto"
 
 H = {
@@ -17,10 +17,27 @@ AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        r = requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=15)
-        print("Telegram Response:", r.status_code)
+        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=15)
     except Exception as e:
         print("خطأ في إرسال تيليجرام:", e)
+
+def check_messages():
+    """التحقق من الرسائل الواردة من تيليجرام والرد عليها"""
+    u = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
+    try:
+        r = requests.get(u, timeout=10)
+        data = r.json()
+        if data.get("ok") and data.get("result"):
+            for update in data["result"]:
+                message = update.get("message", {})
+                msg_text = message.get("text", "")
+                sender_id = str(message.get("from", {}).get("id", ""))
+                
+                # لو الرسالة جاية منك، رد عليه فوراً بالكلمات اللي طلبتها
+                if sender_id == CHAT and msg_text:
+                    send("اطمن انا شغال وبراقب ياجيمي 🤖⚡")
+    except Exception as e:
+        print("خطأ في استقبال الرسائل:", e)
 
 def clean(text):
     x = text.translate(AR).replace(",", "")
@@ -39,7 +56,7 @@ def check_search_page():
         items = s.select("div.s-result-item[data-asin]")
         
         found_count = 0
-        report = "🟢 *تقرير مراقبة DeFacto*\n\n"
+        report = "📦 *تقرير مراقبة DeFacto:* \n\n"
         
         for item in items:
             asin = item.get("data-asin")
@@ -58,17 +75,16 @@ def check_search_page():
                 continue
                 
             found_count += 1
-            if found_count <= 5: # بنعرض اول 5 منتجات في الرسالة عشان ما تبطأش
-                report += f"▪️ {name[:35]}...\n💰 السعر: {price} ج.م\n🔗 [رابط المنتج](https://www.amazon.eg/dp/{asin})\n\n"
+            if found_count <= 5:
+                report += f"▪️ {name[:30]}...\n💰 السعر: {price} ج.م\n🔗 [رابط المنتج](https://www.amazon.eg/dp/{asin})\n\n"
             
         report += f"📊 إجمالي المنتجات المفحوصة: {found_count}"
         send(report)
 
     except Exception as e:
-        err_msg = f"❌ خطأ أثناء الفحص: {str(e)}"
-        print(err_msg)
-        send(err_msg)
+        send(f"❌ حصل خطأ أثناء الفحص يا جيمي: {str(e)}")
 
 if __name__ == "__main__":
+    # أول ما يشتغل، يشيك على الرسائل ويرد، وبعدين يفحص الأسعار
+    check_messages()
     check_search_page()
-    
