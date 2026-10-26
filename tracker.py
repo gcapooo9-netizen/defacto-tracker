@@ -7,7 +7,13 @@ CHAT = "5124680786"
 
 SEARCH_URL = "https://www.amazon.eg/s?k=defacto"
 
-# هيدرز محسنة ومحاكاة لمتصفح حقيقي لتخطي حماية أمازون قدر الإمكان
+# قائمة بالبروكسيات (يمكنك إضافة بروكسيات HTTP/HTTPS حقيقية ونشطة هنا)
+# ملاحظة: البروكسيات المجانية تتغير باستمرار، لذا يفضل استخدام بروكسي مدفوع أو موثوق لضمان الاستقرار
+PROXIES_LIST = [
+    # مثال لشكل البروكسي:
+    # {"http": "http://IP:PORT", "https": "http://IP:PORT"},
+]
+
 H = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9,ar;q=0.8",
@@ -37,19 +43,37 @@ def clean(text):
 
 def check_search_page():
     print(f"[{time.strftime('%H:%M:%S')}] جاري فحص صفحة منتجات ديفاكتو...")
+    
+    r = None
+    session = requests.Session()
+    
+    # إذا كانت القائمة فارغة، سيحاول الاتصال مباشرة
+    if not PROXIES_LIST:
+        try:
+            r = session.get(SEARCH_URL, headers=H, timeout=25)
+        except Exception as e:
+            print(f"خطأ في الاتصال المباشر: {e}")
+    else:
+        # التجربة عبر البروكسيات المتاحة
+        for p in PROXIES_LIST:
+            try:
+                print(f"جاري التجربة عبر البروكسي: {p}")
+                r = session.get(SEARCH_URL, headers=H, proxies=p, timeout=15)
+                if r.status_code == 200:
+                    print("نجح الاتصال عبر البروكسي!")
+                    break
+            except Exception as e:
+                print(f"فشل البروكسي {p}: {e}")
+                continue
+
+    if not r or r.status_code != 200:
+        status_code = r.status_code if r else "مجهول"
+        error_msg = f"⚠️ تحذير: فشل جلب الصفحة من أمازون (كود الاستجابة: {status_code})."
+        print(error_msg)
+        send(error_msg)
+        return
+        
     try:
-        # استخدام Session للحفاظ على ملفات تعريف الارتباط الكوكيز (Cookies) إن وجدت
-        session = requests.Session()
-        r = session.get(SEARCH_URL, headers=H, timeout=25)
-        
-        print(f"كود الاستجابة من أمازون: {r.status_code}")
-        
-        if r.status_code != 200:
-            error_msg = f"⚠️ تحذير: أمازون ردت بالكود {r.status_code} ولم يتم الفحص."
-            print(error_msg)
-            send(error_msg)
-            return
-            
         s = BeautifulSoup(r.text, "html.parser")
         items = s.select("div.s-result-item[data-asin]")
         
@@ -78,7 +102,7 @@ def check_search_page():
         send(f"✅ *السكربت يعمل الآن بنجاح!*\n\nوقت الفحص: `{current_time}`\nالمنتجات التي تم رصدها: *{found_count} منتج*")
 
     except Exception as e:
-        err_msg = f"❌ حدث خطأ أثناء فحص الصفحة: {e}"
+        err_msg = f"❌ حدث خطأ أثناء تحليل الصفحة: {e}"
         print(err_msg)
         send(err_msg)
 
