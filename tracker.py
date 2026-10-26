@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
 CHAT = "5124680786"
 
-# رابط بحث مباشر لديفاكتو
 SEARCH_URL = "https://www.amazon.eg/s?k=defacto"
 
 H = {
@@ -18,7 +17,8 @@ AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=15)
+        r = requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=15)
+        print("Telegram Response:", r.status_code)
     except Exception as e:
         print("خطأ في إرسال تيليجرام:", e)
 
@@ -32,13 +32,15 @@ def check_search_page():
     try:
         r = requests.get(SEARCH_URL, headers=H, timeout=25)
         if r.status_code != 200:
-            print(f"تحذير: أمازون ردت بالكود {r.status_code}")
+            send(f"⚠️ تحذير: أمازون ردت بالكود {r.status_code}")
             return
             
         s = BeautifulSoup(r.text, "html.parser")
         items = s.select("div.s-result-item[data-asin]")
         
         found_count = 0
+        report = "🟢 *تقرير مراقبة DeFacto*\n\n"
+        
         for item in items:
             asin = item.get("data-asin")
             if not asin or len(asin) != 10:
@@ -55,17 +57,17 @@ def check_search_page():
             if price is None:
                 continue
                 
-            product_link = f"https://www.amazon.eg/dp/{asin}"
-            
-            # طباعة وتنبيه تجريبي للفحص
-            print(f"تم رصد منتج: {name[:25]}... بسعر {price}")
             found_count += 1
+            if found_count <= 5: # بنعرض اول 5 منتجات في الرسالة عشان ما تبطأش
+                report += f"▪️ {name[:35]}...\n💰 السعر: {price} ج.م\n🔗 [رابط المنتج](https://www.amazon.eg/dp/{asin})\n\n"
             
-        print(f"تم فحص {found_count} منتج بنجاح.")
-        send(f"🟢 *تم فحص أمازون بنجاح*\nتم العثور وفحص {found_count} منتج لـ DeFacto.")
+        report += f"📊 إجمالي المنتجات المفحوصة: {found_count}"
+        send(report)
 
     except Exception as e:
-        print("خطأ أثناء فحص الصفحة:", e)
+        err_msg = f"❌ خطأ أثناء الفحص: {str(e)}"
+        print(err_msg)
+        send(err_msg)
 
 if __name__ == "__main__":
     check_search_page()
