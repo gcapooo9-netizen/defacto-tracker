@@ -9,12 +9,13 @@ PRODUCTS = [
     "https://kenzz.com/product/JJZPTZJKRZJ2/%D8%A8%D9%8A%D9%83%D9%88-%D8%AB%D9%84%D8%A7%D8%AC%D8%A9-%D8%A8%D9%81%D8%B1%D9%8A%D8%B2%D8%B1-%D8%B9%D9%84%D9%88%D9%8A-%D8%A8%D8%A8%D8%A7%D8%A8%D9%8A%D9%86-%D9%86%D9%88%D9%81%D8%B1%D9%88%D8%B3%D8%AA-%D8%A8%D8%AA%D9%82%D9%86%D9%8A%D8%A9-NeoFrost-Dual-Cooling-%D9%81%D8%B6%D9%8A-RDNE400K02DXIEG",
     "https://kenzz.com/product/ZE5H7WYPFNBZ/%D8%AA%D9%83%D9%8A%D9%8A%D9%81-%D9%87%D9%88%D8%A7%D8%A1-%D9%87%D8%A7%D9%8A%D8%B1-%D8%B3%D8%A8%D9%84%D9%8A%D8%AA-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-%D9%83%D9%88%D9%88%D9%84-1.5-%D8%AD%D8%B5%D8%A7%D9%86-%D8%A8%D8%A7%D8%B1%D8%AF-%D8%A8%D9%84%D8%A7%D8%B2%D9%85%D8%A7-%D8%B4%D8%A7%D8%B4%D8%A9-%D8%AF%D9%8A%D8%AC%D9%8A%D8%AA%D8%A7%D9%84-%D8%A3%D8%A8%D9%8A%D8%B6-HSU-12KCROCC",
     "https://kenzz.com/product/NMAQ35ZY3EQS/%D9%85%D9%83%D9%86%D8%B3%D8%A9-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A%D8%A9-%D8%AC%D8%A7%D9%83-JD2400S-2400-%D9%88%D8%A7%D8%AA-%D9%81%D8%B6%D9%8A",
-    "https://kenzz.com/product/9NZ4A9JHSSDB/%D8%B4%D9%81%D8%A7%D8%B7-%D8%AD%D9%85%D8%A7%D9%85-%D8%AA%D9%88%D8%B1%D9%86%D9%8A%D8%AF%D9%88-25-%D8%B3%D9%85-%D8%B4%D8%A8%D8%A9-%D9%84%D9%84%D8%AD%D9%85%D8%A7%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%AE%D8%B5%D9%88%D8%B5%D9%8A%D8%A9-%D9%83%D8%B1%D9%8A%D9%85%D9%8A-TVS-25CM",
+    "https://kenzz.com/product/9NZ4A9JHSSDB/%D8%B4%D9%81%D8%A7%D8%B5-%D8%AD%D9%85%D8%A7%D9%85-%D8%AA%D9%88%D8%B1%D9%86%D9%8A%D8%AF%D9%88-25-%D8%B3%D9%85-%D8%B4%D8%A8%D8%A9-%D9%84%D9%84%D8%AD%D9%85%D8%A7%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%AE%D8%B5%D9%88%D8%B5%D9%8A%D8%A9-%D9%83%D8%B1%D9%8A%D9%85%D9%8A-TVS-25CM",
     "https://kenzz.com/product/ST3CT9SPFZL4/TMH-HS12C(WK)-%D8%BA%D8%B3%D8%A7%D9%84%D8%A9-%D9%86%D8%B5%D9%81-%D8%A3%D9%88%D8%AA%D9%88%D9%85%D8%A7%D8%AA%D9%8A%D9%83-%D8%AA%D9%88%D8%B1%D9%86%D9%8A%D8%AF%D9%88-12-%D9%83%D8%AC%D9%85-%D8%A3%D8%A8%D9%8A%D8%B6-%C3%97-%D8%A3%D8%B3%D9%88%D8%AF",
     "https://kenzz.com/product/VPA7U3BJYMRJ/%D8%BA%D8%B3%D8%A7%D9%84%D8%A9-%D9%85%D9%84%D8%A7%D8%A8%D8%B3-%D8%AA%D8%AD%D9%85%D9%8A%D9%84-%D8%A7%D9%85%D8%A7%D9%85%D9%8A-8-%D9%83%D8%AC%D9%85-1400-%D8%AF%D9%88%D8%B1%D8%A9-%D9%88%D8%A7%D9%8A-%D9%81%D8%A7%D9%8A-%D8%A7%D8%B3%D9%88%D8%AF-F4Y2TYG6X",
     "https://kenzz.com/product/EMAMELYWUUMC/%D8%BA%D8%B3%D8%A7%D9%84%D8%A9-%D9%85%D9%84%D8%A7%D8%B8%D8%A8%D8%B3-%D9%81%D8%B1%D9%8A%D8%B4-13-%D9%83%D8%AC%D9%85-%D8%AA%D8%AD%D9%85%D9%8A%D9%84-%D8%B9%D9%84%D9%88%D9%89-%D9%81%D8%B6%D9%8A-500017071",
     "https://kenzz.com/product/V2FPJUKMWU8T/%D8%B4%D8%A7%D8%B4%D8%A9-HD-%D8%B3%D9%85%D8%A7%D8%AA-32-%D8%A8%D9%88%D8%B5%D8%A9-%D9%81%D8%B6%D9%8A-2T-C32FG6EX",
-    "https://kenzz.com/product/TG75EV4F3CFP/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-%D8%B3%D9%85%D8%A7%D8%AA-%D8%ALED-FHD-%D9%85%D8%B9-%D8%B1%D9%8A%D8%B3%D9%8A%D9%81%D8%B1-%D9%85%D8%AF%D9%85%D8%AC-43-%D8%A8%D9%88%D8%B5%D8%A9-%D8%A3%D8%B3%D9%88%D8%AF-UA43F6000FUXEG-2025"
+    "https://kenzz.com/product/TG75EV4F3CFP/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-%D8%B3%D9%85%D8%A7%D8%AA-%D8%ALED-FHD-%D9%85%D8%B9-%D8%B1%D9%8A%D8%B3%D9%8A%D9%81%D8%B1-%D9%85%D8%AF%D9%85%D8%AC-43-%D8%A8%D9%88%D8%B5%D8%A9-%D8%A3%D8%B3%D9%88%D8%AF-UA43F6000FUXEG-2025",
+    "https://kenzz.com/product/YOUR_NEW_PRODUCT_LINK"  # حطيت لك مكان الرابط الجديد هنا مؤقتاً لحد ما تجيبه من اللينك اللي مافتحش معاك، أو انسخه وحطه مكان النص ده
 ]
 
 H = {
@@ -25,7 +26,7 @@ H = {
 
 AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
 last_prices = {}
-is_first_run = True  # للتأكد من أول تشغيل
+is_first_run = True
 
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -78,7 +79,6 @@ def check_all_products():
             if old_price is None:
                 last_prices[url] = price
                 print(f"✔️ [شغال] {product_title[:30]}... | السعر الابتدائي: {price} ج.م")
-                # يبعت تفاصيل كل منتج في أول تشغيل بس
                 if is_first_run:
                     send(
                         f"🔍 *فحص وبدء مراقبة منتج:*\n\n"
@@ -110,12 +110,10 @@ def check_all_products():
         except Exception as e:
             print(f"خطأ في فحص رابط: {e}")
 
-    # لو دي مش أول لفة، وكل الأسعار مستقرة ومفيش تغيير، يبعت رسالة طمأنة واحدة
     if not is_first_run and not changes_found:
         print("💡 [تقرير الجولة]: تم الفحص، وجميع الأسعار مستقرة.")
         send("🟢 *أنا صاحي ياجيمي وبراقب، بس الأسعار لسه زي ما هيا ومفيش أي تغييرات!* 🤖💪")
     
-    # بعد نهاية أول لفة، بنقفل وضع التشغيل الأول
     if is_first_run:
         is_first_run = False
 
