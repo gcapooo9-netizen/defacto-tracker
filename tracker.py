@@ -7,10 +7,14 @@ CHAT = "5124680786"
 
 SEARCH_URL = "https://www.amazon.eg/s?k=defacto"
 
+# هيدرز محسنة ومحاكاة لمتصفح حقيقي لتخطي حماية أمازون قدر الإمكان
 H = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Accept-Language": "ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9,ar;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1"
 }
 
 AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
@@ -34,7 +38,12 @@ def clean(text):
 def check_search_page():
     print(f"[{time.strftime('%H:%M:%S')}] جاري فحص صفحة منتجات ديفاكتو...")
     try:
-        r = requests.get(SEARCH_URL, headers=H, timeout=25)
+        # استخدام Session للحفاظ على ملفات تعريف الارتباط الكوكيز (Cookies) إن وجدت
+        session = requests.Session()
+        r = session.get(SEARCH_URL, headers=H, timeout=25)
+        
+        print(f"كود الاستجابة من أمازون: {r.status_code}")
+        
         if r.status_code != 200:
             error_msg = f"⚠️ تحذير: أمازون ردت بالكود {r.status_code} ولم يتم الفحص."
             print(error_msg)
@@ -65,7 +74,6 @@ def check_search_page():
             
         print(f"تم فحص {found_count} منتج بنجاح.")
         
-        # 🔔 رسالة تأكيد تعمل في كل مرة يتشغيل فيها السكربت لكي تطمئن أنه شغال
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
         send(f"✅ *السكربت يعمل الآن بنجاح!*\n\nوقت الفحص: `{current_time}`\nالمنتجات التي تم رصدها: *{found_count} منتج*")
 
@@ -76,4 +84,3 @@ def check_search_page():
 
 if __name__ == "__main__":
     check_search_page()
-    
