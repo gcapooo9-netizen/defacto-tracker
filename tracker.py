@@ -22,19 +22,19 @@ PRODUCTS = [
     "https://kenzz.com/product/6EFW8S9W6YN7/%D9%85%D9%81%D8%B1%D9%85%D8%A9-%D9%84%D8%AD%D9%85%D8%A9-%D8%B3%D9%88%D9%86%D9%8A%D9%81%D8%B1-2000-%D9%88%D8%A7%D8%AA-%D8%A3%D8%AD%D9%85%D8%B1-SF-5002",
     "https://kenzz.com/product/8UCQ5FK55C24/%D8%AC%D8%A7%D9%83-%D9%85%D9%8A%D9%83%D8%B1%D9%88%D9%88%D9%8A%D9%81-43-%D9%84%D8%AA%D8%B1-%D9%81%D8%B6%D9%8A-NGM-43M3",
     "https://kenzz.com/product/UUTRDUD9YD6W/%D8%BA%D9%84%D8%A7%D9%8A%D8%A9-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A%D8%A9-%D9%83%D8%A7%D8%B3%D9%8A%D9%84-%D8%B3%D8%AA%D8%A7%D9%86%D9%84%D8%B3-%D8%B3%D8%AA%D9%8A%D9%84-1.7-%D9%84%D8%AA%D8%B1-%D9%81%D8%B6%D9%8A-EK1017S",
-    "https://kenzz.com/product/Y7GY5A8Y3RVC/%D8%AE%D9%84%D8%A7%D8%B7-%D9%8A%D8%AF%D9%88%D9%8A-%D8%AA%D9%88%D8%B1%D8%A8%D9%88-%D8%A8%D9%84%D8%B3-%D9%85%D9%8A%D9%86%D8%AA%D8%A7-1000-%D9%88%D8%A7%D8%AA-HB111438A",
+    "https://kenzz.com/product/Y7GY5A8Y3RVC/%D8%AE%D9%84%D8%A7%D8%B7-%D9%8A%D8%AF%D9%88%D9%8A-%D8%AA%D9%88%D8%B1%D8%A8%D9%88-%D8%A8%D9%84%D8%B3-%D9%85%D9%8A%D9%86%D8%AA%D8%A7-1000-%D9%88%D8%A7%D8%AA-%D8%A3%D8%AD%D9%85%D8%B1-HB111438A",
     "https://kenzz.com/product/XRBGQRR9FMJ4/%D8%B9%D8%AC%D8%A7%D9%86-%D8%B3%D8%AA%D8%A7%D9%86%D8%AF-%D9%85%D9%8A%D8%A7%D9%86%D8%AA%D8%A7-10-%D9%84%D8%AA%D8%B1-2000-%D9%88%D8%A7%D8%AA-%D9%81%D8%B6%D9%8A-KM38432A",
     "https://kenzz.com/product/HERJK9GHETEZ/%D9%85%D9%8A%D9%86%D8%AA%D8%A7-%D8%BA%D9%84%D8%A7%D9%8A%D8%A9-%D8%B2%D8%AC%D8%A7%D8%AC-2200-%D9%88%D8%A7%D8%B7-%D8%B3%D8%B9%D8%A9-1.7-%D9%84%D8%AA%D8%B1-%D8%B4%D9%81%D8%A7%D9%81-EK201837A",
     "https://kenzz.com/product/XV9LZW2273TK/BL1361B-%D8%AE%D9%84%D8%A7%D8%B7-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A-400-%D9%88%D8%A7%D8%AA-%D8%A3%D8%B3%D9%88%D8%AF",
-    "https://kenzz.com/product/2AKZYBESM7XN/%D9%85%D9%83%D9%86%D8%B3%D8%A9-%D9%83%D8%A7%D8%B1%D8%B4%D8%B1-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A%D8%A9-BC-WD2-Plus-%D9%84%D9%84%D8%A3%D8%AA%D8%B1%D8%A8%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D9%88%D8%A7%D8%A6%D9%84-12-%D9%84%D8%AA%D8%B1-1000-%D9%88%D8%A7%D8%B7",
-    "https://kenzz.com/product/Q3L6P5Q25CNF/CP103-%D8%B9%D8%B5%D8%A7%D8%B1%D8%A9-%D8%A8%D8%B1%D8%AA%D9%82%D8%A7%D9%84-%D8%A3%D8%B3%D9%8A%D8%B6",
+    "https://kenzz.com/product/2AKZYBESM7XN/%D9%85%D9%83%D9%86%D8%B3%D8%A9-%D9%83%D8%A7%D8%B1%D8%B4%D8%B1-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A%D8%A9-BC-WD2-Plus-%D9%84%D9%84%D8%A3%D8%AA%D8%B1%D8%A8%D8%A9-%D9%88%D8%A7%D8%B3%D9%88%D8%A7%D8%A6%D9%84-12-%D9%84%D8%AA%D8%B1-1000-%D9%88%D8%A7%D8%B7".replace("واسائل", "والسوائل"),
+    "https://kenzz.com/product/Q3L6P5Q25CNF/CP103-%D8%B9%D8%B5%D8%A7%D8%B1%D8%A9-%D8%A8%D8%B1%D8%AA%D9%82%D8%A7%D9%84-%D8%A3%D8%B3%D9%8A%D8%B6".replace("أسيش", "أبيض"),
     "https://kenzz.com/product/UYRPKY8B8LAB/%D9%83%D8%A7%D8%AA%D9%8A%D9%84-%D8%AC%D8%A7%D9%83-NGK-11D-2200-%D9%88%D8%A7%D8%AA-%D8%B3%D9%8A%D9%84%D9%81%D8%B1",
     "https://kenzz.com/product/MHNYGLT6FRY8/JMK2003-%D9%85%D8%A7%D9%83%D9%8A%D9%86%D8%A9-%D8%B5%D9%86%D8%B9-%D8%A7%D9%84%D8%B3%D8%A7%D9%86%D8%AF%D9%88%D8%B4%D8%B4",
     "https://kenzz.com/product/BQS6YZPC6LEK/%D9%82%D9%84%D8%A7%D9%8A%D8%A9-%D9%87%D9%88%D8%A7%D8%A6%D9%8A%D8%A9-%D9%81%D8%B1%D9%8A%D8%B4-%D8%A7%D9%83%D8%B3-%D9%84%D8%A7%D8%B1%D8%AC-7-%D9%84%D8%AA%D8%B1-%D8%A3%D8%B3%D9%88%D8%AF-AFF-1800B",
     "https://kenzz.com/product/CGQBGD8LRTEX/%D9%85%D9%8A%D9%83%D8%B1%D9%88%D9%88%D9%8A%D9%81-%D9%81%D8%B1%D9%8A%D8%B4-%D9%85%D8%B9-%D8%B4%D9%88%D8%A7%D9%8A%D8%A9-25-%D9%84%D8%AA%D8%B1-%D8%A3%D8%B3%D9%88%D8%AF-FMW-25KCG-BW",
     "https://kenzz.com/product/KK2UCSLHW9XS/%D9%85%D9%83%D9%86%D8%B3%D8%A9-%D8%AC%D8%A7%D9%83-JC2200R-2200-%D9%88%D8%A7%D8%AA-%D8%A3%D8%AD%D9%85%D8%B1",
     "https://kenzz.com/product/U8NWV76U8D8X/SK-8014-%D9%82%D9%84%D8%A7%D9%8A%D8%A9-%D9%87%D9%88%D8%A7%D8%A6%D9%8A%D8%A9-%D9%83%D9%87%D8%B1%D8%A8%D8%A7%D8%A6%D9%8A%D8%A9-8-%D9%84%D8%AA%D8%B1-%D8%A3%D8%B3%D9%88%D8%AF-%D9%81%D8%B6%D9%8A",
-    "https://kenzz.com/product/MSMSJW8AHT27/%D9%85%D8%A7%D9%83%D9%8A%D9%86%D8%A9-%D9%82%D9%87%D9%88%D8%A9-%D8%A8%D9%84%D8%AA-%D8%A7%D9%86-%D8%A7%D9%88%D8%AA%D9%88%D9%85%D8%A7%D8%AA%D9%8A%D9%83-%D9%83%D8%A7%D9%89-%D9%85%D9%86-%D8%A8%D9%88%D8%B4-2.4-%D9%84%D8%AA%D8%B1-%D8%A3%D8%B3%D9%88%D8%AF-CTL7181B0".replace("كاي", "كامل"),
+    "https://kenzz.com/product/MSMSJW8AHT27/%D9%85%D8%A7%D9%83%D9%8A%D9%86%D8%A9-%D9%82%D9%87%D9%88%D8%A9-%D8%A8%D9%84%D8%AA-%D8%A7%D9%86-%D8%A7%D9%88%D8%AA%D9%88%D9%85%D8%A7%D8%AA%D9%8A%D9%83-%D9%83%D8%A7%D9%89-%D9%85%D9%86-%D8%A8%D8%B8%D8%A7%D8%AD-2.4-%D9%84%D8%AA%D8%B1-%D8%A3%D8%B3%D9%88%D8%AF-CTL7181B0".replace("كاي", "كامل").replace("بظاح", "بوش"),
     "https://kenzz.com/product/W5ZZYCBPVW2R/%D9%85%D8%B6%D8%B1%D8%A8-%D9%8A%D8%AF%D9%88%D9%8A-%D9%85%D9%8A%D8%A7%D9%86%D8%AA%D8%A7-%D8%AF%D9%8A%D9%84%D8%A7%D9%8A%D8%AA-%D8%A3%D8%B3%D9%88%D8%AF-HM13729A-%D8%A8%D8%A7%D9%84%D8%B6%D9%85%D8%A7%D9%86",
     "https://kenzz.com/product/DVZZPJSCDCRF/%D9%85%D8%A7%D9%83%D9%8A%D9%86%D8%A9-%D9%82%D9%87%D9%88%D8%A9-%D8%A5%D8%B3%D8%A8%D8%B1%D8%B3%D9%88-SK-04042-%D9%85%D9%86-%D8%B3%D9%88%D9%83%D8%A7%D9%86%D9%8A-3*1-1.4-%D9%84%D8%AA%D8%B1-1800-%D9%88%D8%A7%D8%B7-20-%D8%A8%D8%A7%D8%B1-%D9%81%D8%B6%D9%8A",
 
@@ -87,6 +87,7 @@ def check_all_products():
     global is_first_run
     print(f"\n[{time.strftime('%H:%M:%S')}] جاري فحص جميع المنتجات على كنز ({len(PRODUCTS)} منتج)...")
     changes_found = False
+    success_count = 0  # عداد للمنتجات التي تم فحصها بنجاح
     
     for url in PRODUCTS:
         success = False
@@ -127,10 +128,11 @@ def check_all_products():
         if not price:
             continue
             
+        # لو وصلنا هنا يبقى السعر اتسحب بنجاح
+        success_count += 1
         old_price = last_prices.get(url)
         
         if old_price is None:
-            # تخزين السعر الابتدائي في صمت تـام من غير إزعاج ولا رسايل طويلة
             last_prices[url] = price
             print(f"✔️ [شغال] {product_title[:30]}... | السعر الابتدائي: {price} ج.م")
         elif price != old_price:
@@ -155,7 +157,7 @@ def check_all_products():
 
     if not is_first_run and not changes_found:
         print("💡 [تقرير الجولة]: تم الفحص، وجميع الأسعار مستقرة.")
-        send("🟢 *انا شغال ياجيمي متقلقش بس الأسعار لسه زي ماهي مفيش تغيير* 🤖💪")
+        send(f"🟢 *انا شغال ياجيمي متقلقش بس الأسعار لسه زي ماهي مفيش تغيير* (تم مراقبة *{success_count}* منتج بنجاح) 🤖💪")
     
     if is_first_run:
         is_first_run = False
