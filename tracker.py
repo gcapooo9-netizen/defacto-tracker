@@ -157,7 +157,7 @@ PRODUCTS = [
     "https://kenzz.com/en/product/Z9K4M3PK4CZB/Fresh-Smart-Tv-43-Inches-Fhd-Led-43Lf423Ce",
     "https://kenzz.com/product/D8HANESRB8UU/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-65-%D8%A8%D9%88%D8%B5%D8%A9-%D8%A7%D9%84%D8%B0%D9%83%D9%8A-4K-UHD-QLED-%D9%85%D8%B9-%D8%B1%D8%B3%D9%8A%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-65Q80CA",
     "https://kenzz.com/product/NPN84XL8VVWU/Q60D-%D8%AA%D9%84%D9%8A%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-2024-QLED-Tizen-OS-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-QA50Q60DAUXEG",
-    "https://kenzz.com/product/PEW6Y5KH9QPQ/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-75-%D8%A8%D9%88%D8%B5%D8%A9-QLED-4K-UHD-%D8%B1%D9%8A%D8%B3%D9%85%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-75Q70DAUXEG",
+    "https://kenzz.com/product/PEW6Y5KH9QPQ/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-75-%D8%A8%D9%88%D8%B5%D8%A9-QLED-4K-UHD-%D8%B1%D9%8A%D8%B3%D9%85%D9%81%D8%B5-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-75Q70DAUXEG",
     "https://kenzz.com/product/VJAA64HRV7YW/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-The-Frame-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-4K-LS03D-QLED"
 ]
 
@@ -190,28 +190,31 @@ stored_data = load_data()
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown", "disable_web_page_preview": True}, timeout=10)
+        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=10)
     except Exception as e:
         print(f"خطأ في إرسال رسالة التليجرام: {e}")
 
 def check_prices():
     global stored_data
     
-    # رسالة بداية دورة البحث الجديدة
-    send("🔍 *بدأت أراقب ياجيمي المنتجات*")
-    print(f"\n[🔄] بدء فحص عدد {len(PRODUCTS)} منتج...")
+    total_products_count = len(PRODUCTS)
+    registered_total_count = len(stored_data)
+    
+    # رسالة بداية دورة البحث الجديدة مع توضيح العدد الكلي والمسجل
+    send(f"🔍 *بدأت أراقب يا جيمي المنتجات*\n\n📦 إجمالي المنتجات بالقائمة: `{total_products_count}`\n💾 المنتجات المسجلة مسبقاً: `{registered_total_count}`")
+    print(f"\n[🔄] بدء فحص عدد {total_products_count} منتج...")
     
     changes_count = 0
     checked_count = 0
+    new_added_count = 0
     current_time_str = datetime.now().strftime("%d/%m/%Y %H:%M")
     
     for index, url in enumerate(PRODUCTS, 1):
         try:
             response = requests.get(url, headers=H, timeout=15, allow_redirects=True)
-            actual_url = response.url
             
             if response.status_code != 200:
-                print(f"[{index}/{len(PRODUCTS)}] فشل فحص المنتج (كود الاستجابة: {response.status_code})")
+                print(f"[{index}/{total_products_count}] فشل فحص المنتج (كود الاستجابة: {response.status_code})")
                 continue
             
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -261,7 +264,6 @@ def check_prices():
             
             if current_price:
                 checked_count += 1
-                product_link = actual_url if "/product/" in actual_url else url
                 is_new_product = url not in stored_data
                 
                 if is_new_product:
@@ -270,21 +272,7 @@ def check_prices():
                         "current_price": current_price,
                         "history": [{"price": current_price, "time": current_time_str}]
                     }
-                    
-                    # إرسال إشعار للمنتجات الجديدة لتتأكد من الروابط
-                    msg = (
-                        f"✨ عرض كنز ✨\n\n"
-                        f"🛒 {product_name}\n\n"
-                        f"💵 السعر الحالي: EGP {current_price}\n"
-                        f"💵 السعر السابق: EGP {current_price}\n"
-                        f"📊 متوسط الأسعار: EGP {current_price}\n"
-                        f"📉 نسبة الخصم: 0.0%\n\n"
-                        f"📜 تاريخ الأسعار:\n"
-                        f"➡️ EGP {current_price} – {current_time_str}\n\n"
-                        f"🛍️ سارع بالشراء!\n"
-                        f"🔗 {product_link}"
-                    )
-                    send(msg)
+                    new_added_count += 1
                 else:
                     item_data = stored_data[url]
                     old_price = item_data["current_price"]
@@ -307,6 +295,7 @@ def check_prices():
                         for h in reversed(item_data["history"][-5:]):
                             history_text += f"➡️ EGP {h['price']} – {h['time']}\n"
                         
+                        # إشعار تغير السعر (بدون روابط)
                         msg = (
                             f"✨ عرض كنز ✨\n\n"
                             f"🛒 {product_name}\n\n"
@@ -317,28 +306,42 @@ def check_prices():
                             f"🔥 أقل سعر تاريخي!\n\n"
                             f"📜 تاريخ الأسعار:\n"
                             f"{history_text}\n"
-                            f"🛍️ سارع بالشراء!\n"
-                            f"🔗 {product_link}"
+                            f"🛍️ سارع بالشراء!"
                         )
                         send(msg)
                         changes_count += 1
                 
-                print(f"[{index}/{len(PRODUCTS)}] ✅ تم الفحص - {product_name} | السعر: {current_price}")
+                print(f"[{index}/{total_products_count}] ✅ تم الفحص - {product_name} | السعر: {current_price}")
             else:
-                print(f"[{index}/{len(PRODUCTS)}] ⚠️ لم يتم العثور على السعر.")
+                print(f"[{index}/{total_products_count}] ⚠️ لم يتم العثور على السعر.")
             
             time.sleep(1.5)
             
         except Exception as e:
-            print(f"[{index}/{len(PRODUCTS)}] ❌ خطأ: {e}")
+            print(f"[{index}/{total_products_count}] ❌ خطأ: {e}")
             
     save_data(stored_data)
     
-    # تقرير نهاية الدورة
+    current_stored_total = len(stored_data)
+    
+    # تقرير نهاية الدورة المحدث (يوضح تفاصيل الفحص والعدد المسجل والمرقّب)
     if changes_count == 0:
-        end_msg = f"خلصت يازميلي وملقتش اي تغيير في الأسعار 🤝\nتم فحص عدد {checked_count} منتج بنجاح."
+        end_msg = (
+            f"🤝 خلصت يازميلي وملقتش اي تغيير في الأسعار.\n\n"
+            f"📊 تقرير الفحص:\n"
+            f"• المنتجات التي تم فحصها: `{checked_count}` من `{total_products_count}`\n"
+            f"• المنتجات الجديدة المضافة: `{new_added_count}`\n"
+            f"• إجمالي المنتجات المسجلة حالياً: `{current_stored_total}`"
+        )
     else:
-        end_msg = f"خلصت يازميلي الفحص! تم فحص {checked_count} منتج، ورصد عدد {changes_count} تغير في الأسعار وإرسال تنبيهات بها 🚀"
+        end_msg = (
+            f"🚀 خلصت يازميلي الفحص وتم رصد تغييرات!\n\n"
+            f"📊 تقرير الفحص:\n"
+            f"• المنتجات التي تم فحصها: `{checked_count}` من `{total_products_count}`\n"
+            f"• عدد التغيرات المرصودة: `{changes_count}`\n"
+            f"• المنتجات الجديدة المضافة: `{new_added_count}`\n"
+            f"• إجمالي المنتجات المسجلة حالياً: `{current_stored_total}`"
+        )
     
     send(end_msg)
     print(f"\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير (تم فحص {checked_count} منتج).")
@@ -347,4 +350,4 @@ if __name__ == "__main__":
     print("البوت يعمل الآن ويقوم بمراقبة الأسعار...")
     while True:
         check_prices()
-        time.sleep(900) # الفحص كل ساعة (يمكنك تعديلها لـ 900 لو أردت ربع ساعة)
+        time.sleep(900)  # الفحص كل 15 دقيقة
