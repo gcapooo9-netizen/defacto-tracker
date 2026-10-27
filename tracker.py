@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
-CHAT = "5124680786"
+CHAT = "@gcapooo9"
 DATA_FILE = "prices_cache.json"
 
 # لستة المنتجات المدمجة (التكييفات + الشاشات الحقيقية والصافية 100%)
