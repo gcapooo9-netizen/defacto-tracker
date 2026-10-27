@@ -5,7 +5,9 @@ from bs4 import BeautifulSoup
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
 CHAT = "5124680786"
 
+# لستة المنتجات المدمجة (التكييفات + الشاشات الحقيقية والصافية 100%)
 PRODUCTS = [
+    # --- قسم التكييفات (81 منتج) ---
     "https://kenzz.com/en/product/LUBX8N7XUA4Q/LG-Dual-Cool-Split-Air-Conditioner-3-HP%2C-Cooling-%26-Heating-White-S4-W24K22ME",
     "https://kenzz.com/product/44N3SYU6UF7Q/%D8%AA%D9%83%D9%8A%D9%8A%D9%81-%D8%B3%D8%A8%D9%84%D9%8A%D8%AA-%D9%87%D8%A7%D9%8A%D8%B1-1.5-%D8%AD%D8%B5%D8%A7%D9%86-%D8%A8%D8%A7%D8%B1%D8%AF-%D9%88%D8%B3%D8%A7%D8%AE%D9%86-%D8%A3%D8%A8%D9%8A%D8%B6-HSU-12KHROCC",
     "https://kenzz.com/en/product/9STXGD9JPN4W/Midea-Split-Air-Conditioner-1.5-HP-Cooling-Only-White-MSC1T-12CR-N",
@@ -86,7 +88,73 @@ PRODUCTS = [
     "https://kenzz.com/en/product/34AE5QMYQQ3K/Carrier-Split-Optimax-Inverter-Air-Conditioner-2.25-Hp%2C-Cooling-%26-Heating-White-53Qhct18Dn-708F",
     "https://kenzz.com/en/product/28WJ5S9YZ4Z5/Midea-Mission-Pro-Air-Conditioner-1.5-HP-Cooling-Only-M1SCT-12CRN-Q8",
     "https://kenzz.com/en/product/P2XH3386GLJT/Media-Mission-Pro-Split-Air-Conditioner%2C-Cooling%2C-3-HP%2C-White-MSC1T-24CR-N",
-    "https://kenzz.com/en/product/97P3PEYL3BQH/Beko-Split-Air-Conditioner-1.5-Hp-Inverter-Motor-Cold-Only-White-Bict1221X"
+    "https://kenzz.com/en/product/97P3PEYL3BQH/Beko-Split-Air-Conditioner-1.5-Hp-Inverter-Motor-Cold-Only-White-Bict1221X",
+
+    # --- قسم الشاشات الصافية الحقيقية (60+ شاشة مظبوطة) ---
+    "https://kenzz.com/en/product/2C4UKSKQVG2E/Fresh-32-inch-Frameless-HD-LED-Smart-TV-Black-32LH423CT",
+    "https://kenzz.com/en/product/2WN6YM2Y8EM8/Haier-TV-50-inch-Smart-4K-UHD-LED-TV-with-Built-in-Receiver-H50K80EU",
+    "https://kenzz.com/en/product/2X4HT6GS9YXF/Grohe-Smart-TV-50-inch-4K-Android-LED-Frameless-GLD50SAWORV2",
+    "https://kenzz.com/en/product/3DSN4EHXZHRE/Hyundai-43-Inch-Smart-LED-TV-L43HYNDA630",
+    "https://kenzz.com/en/product/5CRURB65XCHH/Jack-32-Inch-HD-LED-TV-Black-32JC3110B",
+    "https://kenzz.com/en/product/6SW56BKLPDML/LG-65-inch-4K-UHD-LED-Smart-TV-with-Built-in-Receiver-65UA85006LA",
+    "https://kenzz.com/en/product/72F23QNCFUM5/LG-Smart-TV-55-inches-Black-55UR78006LL",
+    "https://kenzz.com/en/product/8DZQ2LQV2HJ8/Xenix-LED-Smart-TV-32-Inch-Bluetooth-Black-32E4M",
+    "https://kenzz.com/en/product/8JJKJVX6SFFV/LG-LED-Smart-TV-55-Inch-4K-UHD-Black-55UQ75006LG",
+    "https://kenzz.com/en/product/8KYCWYNKG8MC/Samsung-Smart-TV-98-inch-4K-Tizen-Crystal-UHD-DU9000",
+    "https://kenzz.com/en/product/ANFQLUK3TDNJ/Mirage-50-Inch-4K-Smart-TV-Built-in-Receiver-50MRU720",
+    "https://kenzz.com/en/product/B6C846V76LEZ/Toshiba-LED-Smart-TV-50-Inch-4K-Black-50U5965EA",
+    "https://kenzz.com/en/product/BETHALZVGABD/Smart-Tv-Screen-32-Inches-Black-Le32Dn4",
+    "https://kenzz.com/en/product/BFHZSWZJQR4M/LG-Smart-TV-55-Inch-Silver-55NANO776QA",
+    "https://kenzz.com/en/product/BUF486L9C4FD/ATA-43-Inch-LED-FHD-TV-Black-ATA43FON",
+    "https://kenzz.com/en/product/C5P69Y68X7HE/Haier-Smart-55-Inch-4K-UHD-LED-TV-Built-in-Receiver-H55K80EU",
+    "https://kenzz.com/en/product/D8HANESRB8UU/Samsung-65-inch-Smart-4K-UHD-QLED-TV-with-Built-in-Receiver-65Q80CA",
+    "https://kenzz.com/en/product/DHCQA9366DM8/LG-43LM6370PVA-43-inch-FHD-Smart-LED-TV-Black",
+    "https://kenzz.com/en/product/EBTYCPV7QG2G/Toshiba-LED-Smart-TV-55-Inch-4K-Black-55U5965EA",
+    "https://kenzz.com/en/product/EYLJ5T9ZWM2F/LG-TV-50-inch-4K-UHD-Smart-LED-TV-with-Built-in-Receiver-50UT801C0LB",
+    "https://kenzz.com/en/product/F9LFL76RNHRL/H1-26-Inch-FHD-LED-TV-Black-HTV26",
+    "https://kenzz.com/en/product/GBXB7D4DNLSV/Jack-32-Inch-HD-LED-TV-Hs-Black-32JB611",
+    "https://kenzz.com/en/product/GMAAUUTEJCZF/Haier-65-Inch-4K-UHD-Smart-LED-TV-Black-H65K80EU",
+    "https://kenzz.com/en/product/GN66P5TJH4W2/Grohe-Smart-TV-32-inch-HD-LED-Frameless-Built-in-Receiver-GLD32SDV2",
+    "https://kenzz.com/en/product/GPUM6LCPBYRS/Castle-HD-TV-32-inch-Black-LED-AC2132",
+    "https://kenzz.com/en/product/HGFEELAENCB8/Evolve-Smart-TV-43-inch-FHD-LED-Frameless-VLD43SAWOR",
+    "https://kenzz.com/en/product/HR4HTPXQWPAW/Haier-Smart-32-Inch-LED-HD-TV-Black-H32K80E",
+    "https://kenzz.com/en/product/J3FAVNKHSJ2G/Samsung-32-Inch-Smart-TV-Built-in-Receiver-UA32T5300",
+    "https://kenzz.com/en/product/J7YUNXT4WEV2/Sharp-50-Inch-4K-Smart-TV-Frameless-Built-in-Receiver-4T-C50FL6EX",
+    "https://kenzz.com/en/product/JCTNNKBRF6L4/Sharp-4K-Smart-Tv-Without-Frame-55-Inches-With-Built-In-Receiver-4T-C55Fl6Ex",
+    "https://kenzz.com/en/product/JTEE6KJMH8YG/Evolve-Smart-TV-43-inch-FHD-Frameless-Built-in-Receiver-VLD43SD",
+    "https://kenzz.com/en/product/K6CC5ED7GARN/Ata-43-Inch-Fhd-Led-Smart-Tv-Black-43fls",
+    "https://kenzz.com/en/product/KGX5T5AKDDVB/Ata-32-Inch-Led-Hd-Tv-Black",
+    "https://kenzz.com/en/product/KT4K86RF22VF/LG-Smart-TV-50-inches-LED-with-built-in-receiver-50UT80006LA",
+    "https://kenzz.com/en/product/L3NNCWQLB3NT/Castle-Smart-TV-43-inch-Smart-LED-AC2543-S",
+    "https://kenzz.com/en/product/LTK8C8ZVK4UP/Jack-Frameless-50-Inch-Led-Smart-Tv-4K-Uhd-50Jc7132F",
+    "https://kenzz.com/en/product/MW6UDJUGKWSE/Mirage-32-Inch-HD-LED-TV-Black-32MRNF820",
+    "https://kenzz.com/en/product/N4N8GZKTDNPB/Castle-HD-TV-43-inch-Black-AC2543",
+    "https://kenzz.com/en/product/NPN84XL8VVWU/Samsung-50-Inch-QLED-Q60D-4K-Tizen-OS-Smart-TV-QA50Q60DAUXEG",
+    "https://kenzz.com/en/product/NTAAUDGWVGN7/ATA-Smart-TV-55-Inch-4K-Black-ATA55U0S",
+    "https://kenzz.com/en/product/NTV8SM8EKG5H/Mirage-43-Inch-Smart-TV-with-Built-in-Receiver-FHD-43MA6000",
+    "https://kenzz.com/en/product/PEW6Y5KH9QPQ/Samsung-TV-75-inch-QLED-4K-UHD-Built-in-Receiver-75Q70DAUXEG",
+    "https://kenzz.com/en/product/PFVA9YQ9DW3A/Tornado-4K-Smart-TV-50-Inch-Built-in-Receiver-50UA3400E",
+    "https://kenzz.com/en/product/PKJU4ZKLKZNC/Jack-43-Inch-FHD-Smart-LED-TV-Black-NGLD-143ASS-143N-JB621",
+    "https://kenzz.com/en/product/PY8W8BL5YWPT/Samsung-43-T5300-LED-FHD-Smart-TV-UA43T5300AUXEG",
+    "https://kenzz.com/en/product/Q59EUEC8R36B/Evolve-Smart-TV-32-inch-HD-LED-Frameless-VLD32NA",
+    "https://kenzz.com/en/product/QNDPDFBX4NYB/Hyundai-Smart-TV-65-Inch-LED-4K-UHD-Built-in-Receiver-L65HYNDA650",
+    "https://kenzz.com/en/product/RKKERANW6R9D/ATA-Smart-TV-65-inch-4K-LED-ATA65UOS",
+    "https://kenzz.com/en/product/SS479XYN72LZ/Tornado-Smart-TV-50-Inch-D-LED-4K-UHD-Built-in-Receiver-50US3500E",
+    "https://kenzz.com/en/product/SVJDQJ82MMAD/Samsung-55-inch-Crystal-UHD-Smart-TV-with-Built-in-Receiver-UA55DU8000",
+    "https://kenzz.com/en/product/TG75EV4F3CFP/Samsung-43-Inch-Full-HD-Smart-LED-TV-with-Built-in-Receiver-Black-UA43F6000FUXEG",
+    "https://kenzz.com/en/product/THXQCGC9W775/LG-Smart-TV-43-inches-LED-with-built-in-receiver-43UT80006LA",
+    "https://kenzz.com/en/product/TQTESFFKHHZ6/Nautical-43-Inch-LED-FHD-TV-Black-DLP43-AM4600N",
+    "https://kenzz.com/en/product/V2FPJUKMWU8T/HD-Smart-Screen-32-inches-Silver-2T-C32FG6EX",
+    "https://kenzz.com/en/product/VL7AA9WSGGRJ/Hyundai-Smart-LED-TV-55-inch-UHD-4K-webOS-L55HYNDA650",
+    "https://kenzz.com/en/product/WBFTAWRSLNA3/Grohe-Smart-TV-32-inch-HD-LED-Frameless-GLD32NAV2",
+    "https://kenzz.com/en/product/X7556K2CAKCQ/Sharp-55-inch-LED-4K-UHD-Smart-TV-with-Google-TV-Frameless-4T-C55FJ16EX",
+    "https://kenzz.com/en/product/Y9EPFE24JT7F/Sharp-Smart-TV-75-Inch-4K-Built-in-Receiver-4T-C75FN6EX",
+    "https://kenzz.com/en/product/YCFQYQ7J8G4V/4K-Smart-TV-55-inches-Silver-4T-C55DL6EX",
+    "https://kenzz.com/en/product/Z9K4M3PK4CZB/Fresh-Smart-Tv-43-Inches-Fhd-Led-43Lf423Ce",
+    "https://kenzz.com/product/D8HANESRB8UU/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-65-%D8%A8%D9%88%D8%B5%D8%A9-%D8%A7%D9%84%D8%B0%D9%83%D9%8A-4K-UHD-QLED-%D9%85%D8%B9-%D8%B1%D8%B3%D9%8A%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-65Q80CA",
+    "https://kenzz.com/product/NPN84XL8VVWU/Q60D-%D8%AA%D9%84%D9%8A%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-2024-QLED-Tizen-OS-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-QA50Q60DAUXEG",
+    "https://kenzz.com/product/PEW6Y5KH9QPQ/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-75-%D8%A8%D9%88%D8%B5%D8%A9-QLED-4K-UHD-%D8%B1%D9%8A%D8%B3%D9%8A%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-75Q70DAUXEG",
+    "https://kenzz.com/product/VJAA64HRV7YW/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-The-Frame-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-4K-LS03D-QLED"
 ]
 
 H = {
@@ -101,98 +169,4 @@ last_prices = {}
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=5)
-    except:
-        pass
-
-def clean(text):
-    x = text.translate(AR).replace(",", "")
-    x = "".join(c for c in x if c.isdigit() or c == ".").strip(".")
-    return float(x) if x else None
-
-def get_product_price(soup):
-    # محاولة البحث في الكلاسات المعروفة أولاً
-    price_tag = soup.select_one(".price, span[class*='price'], div[class*='price'], span[class*='amount']")
-    if price_tag:
-        p = clean(price_tag.get_text())
-        if p and p > 100:
-            return p
-            
-    # لو ملقاش، يبحث في أي عنصر جوه الصفحة جواه كلمة ج.م أو EGP
-    for el in soup.find_all(True):
-        t = el.get_text(strip=True)
-        if ("ج.م" in t or "جنيه" in t or "EGP" in t) and len(t) < 30:
-            p = clean(t)
-            if p and p > 100:
-                return p
-    return None
-
-def check_all_products():
-    if not PRODUCTS:
-        print(f"\n[{time.strftime('%H:%M:%S')}] ⚠️ لستة المنتجات فارغة!")
-        return
-
-    print(f"\n[{time.strftime('%H:%M:%S')}] 🔄 جاري فحص الـ {len(PRODUCTS)} تكييف بالترتيب وبدون حظر...")
-    success_count = 0  
-    
-    for i, url in enumerate(PRODUCTS, 1):
-        try:
-            print(f"⏳ جاري فحص المنتج [{i}/{len(PRODUCTS)}]...")
-            r = requests.get(url, headers=H, timeout=8)
-            
-            if r.status_code != 200:
-                print(f"⚠️ تخطي، كود الاستجابة: {r.status_code}")
-                continue
-                
-            s = BeautifulSoup(r.text, "html.parser")
-            
-            title_tag = s.select_one("h1, title")
-            product_title = title_tag.get_text(strip=True) if title_tag else "منتج من كنز"
-            product_title = product_title.split("|")[0].replace("كنز", "").strip()
-
-            price = get_product_price(s)
-                            
-            if not price:
-                print(f"[تحذير] تعذر العثور على السعر للمنتج رقم {i}")
-                continue
-                
-            success_count += 1
-            old_price = last_prices.get(url)
-            
-            if old_price is None:
-                last_prices[url] = price
-                print(f"✔️ [{success_count}] {product_title[:25]}... | السعر: {price} ج.م")
-            elif price != old_price:
-                diff = price - old_price
-                status = "📉 نزل" if diff < 0 else "📈 زاد"
-                msg = (
-                    f"🚨 *تغيير سعر تكييف على كنز!*\n\n"
-                    f"📦 {product_title}\n\n"
-                    f"الحالة: {status}\n"
-                    f"من: `~{old_price}~ ج.م`\n"
-                    f"إلى: *{price} ج.م*\n\n"
-                    f"🛒 [رابط المنتج]({url})"
-                )
-                send(msg)
-                print(f"🔥 تغيير سعر! {price} ج.م")
-                last_prices[url] = price
-            else:
-                print(f"🔄 [{success_count}] مستقر: {product_title[:20]}... | {price} ج.م")
-                
-            time.sleep(1)
-            
-        except Exception as e:
-            print(f"⚠️ خطأ في الرابط رقم {i}: {e}")
-            continue
-
-    if success_count > 0:
-        send(f"🟢 *تم فحص جميع التكييفات بنجاح!* (تم رصد *{success_count}* تكييف شغال ومستقر) 🤖❄️")
-
-    print(f"----------------------------------------\n💡 انتهت الجولة وتم فحص {success_count} تكييف.")
-
-print("مراقبة أسعار التكييفات المنتظمة شغالة...")
-while True:
-    check_all_products()
-    print("انتظار اللفة القادمة (15 دقيقة)...")
-    time.sleep(900)
-    
+        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, ti
