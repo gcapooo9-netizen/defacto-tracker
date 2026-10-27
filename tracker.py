@@ -1,4 +1,5 @@
 import time
+import json
 import requests
 from bs4 import BeautifulSoup
 
@@ -165,8 +166,118 @@ H = {
 
 AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
 last_prices = {}
+is_first_run = True  # متغير لمعرفة هل هذه هي عملية البحث الأولى أم لا
 
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, ti
+        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=10)
+    except Exception as e:
+        print(f"خطأ في إرسال رسالة التليجرام: {e}")
+
+def check_prices():
+    global last_prices, is_first_run
+    print(f"\n[🔄] بدء فحص عدد {len(PRODUCTS)} منتج...")
+    changes_count = 0
+    
+    for index, url in enumerate(PRODUCTS, 1):
+        try:
+            response = requests.get(url, headers=H, timeout=15)
+            
+            if response.status_code != 200:
+                print(f"[{index}/{len(PRODUCTS)}] فشل فحص المنتج (كود الاستجابة: {response.status_code})")
+                continue
+            
+            soup = BeautifulSoup(response.text, 'html.parser')
+            current_price = None
+            product_name = None
+            
+            # 1. استخراج الاسم والسعر بدقة من بيانات الـ JSON-LD (عربي أو إنجليزي بدون أخطاء)
+            for script in soup.find_all('script', type='application/ld+json'):
+                try:
+                    data = json.loads(script.string)
+                    data_items = data if isinstance(data, list) else [data]
+                    
+                    for item in data_items:
+                        if isinstance(item, dict) and item.get('@type') == 'Product':
+                            product_name = item.get('name')
+                            offers = item.get('offers')
+                            if isinstance(offers, dict):
+                                p = offers.get('price') or offers.get('lowPrice')
+                                if p:
+                                    current_price = float(p)
+                                    break
+                            elif isinstance(offers, list) and len(offers) > 0:
+                                p = offers[0].get('price')
+                                if p:
+                                    current_price = float(p)
+                                    break
+                    if current_price:
+                        break
+                except:
+                    pass
+            
+            # Fallback للاسم لو لم يتم إيجاده في JSON-LD
+            if not product_name:
+                h1 = soup.find('h1')
+                product_name = h1.get_text().strip() if h1 else "منتج بدون اسم"
+            
+            # Fallback للسعر لو لم يتم إيجاده في JSON-LD
+            if not current_price:
+                price_element = (
+                    soup.find('span', {'class': 'price'}) or 
+                    soup.find('div', {'class': 'price'}) or 
+                    soup.find('span', {'class': 'current-price'}) or
+                    soup.find('span', class_=lambda x: x and 'price' in x.lower())
+                )
+                if price_element:
+                    price_text = price_element.get_text().strip().translate(AR)
+                    price_str = ''.join(c for c in price_text if c.isdigit() or c == '.')
+                    if price_str:
+                        current_price = float(price_str)
+            
+            if current_price:
+                # إذا كانت عملية الفحص الأولى، ابعت كل منتج تم فحصه
+                if is_first_run:
+                    initial_msg = f"🔍 **الفحص الأولي:**\n\n📦 **المنتج:** {product_name}\n💰 **السعر:** {current_price} ج.م\n🔗 [رابط المنتج]({url})"
+                    send(initial_msg)
+                
+                # مراقبة التغيرات في الدورات اللاحقة
+                elif url in last_prices:
+                    old_price = last_prices[url]
+                    if current_price != old_price:
+                        diff = current_price - old_price
+                        msg = f"🚨 **تغير في السعر!**\n\n📦 **المنتج:** {product_name}\n🔗 [رابط المنتج]({url})\n💰 السعر القديم: {old_price}\n🔥 السعر الجديد: {current_price}\n📊 الفرق: {diff}"
+                        send(msg)
+                        changes_count += 1
+                
+                last_prices[url] = current_price
+                print(f"[{index}/{len(PRODUCTS)}] ✅ تم الفحص - {product_name} | السعر: {current_price}")
+            else:
+                print(f"[{index}/{len(PRODUCTS)}] ⚠️ لم يتم العثور على السعر.")
+            
+            time.sleep(1.5)
+            
+        except Exception as e:
+            print(f"[{index}/{len(PRODUCTS)}] ❌ خطأ: {e}")
+            
+    # انتهاء الفحص الأولي أو انتهاء الدورة الحالية
+    if is_first_run:
+        is_first_run = False
+        send("✅ **انتهى الفحص الأولي لجميع المنتجات بنجاح!**\nالبوت يعمل الآن في صمت ولن يزعجك إلا عند حدوث تغيير أو انتهاء كل دورة فحص.")
+        print("\n[✅] انتهى الفحص الأولي. البوت مستمر في المراقبة الصامتة...")
+    else:
+        # تقرير نهاية الدورة الصامتة
+        if changes_count == 0:
+            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم فحص جميع المنتجات بنجاح، ولم يتم رصد أي تغيير في الأسعار حتى الان."
+        else:
+            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم الانتهاء من الفحص ورصد عدد {changes_count} تغير في الأسعار وتم إرسال تنبيهات بها."
+        send(cycle_msg)
+        print("\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير. جاري الانتظار للدورة القادمة...")
+
+if __name__ == "__main__":
+    print("البوت يعمل الآن ويقوم بمراقبة الأسعار...")
+    while True:
+        check_prices()
+        time.sleep(1800) # الفحص كل نصف ساعة
+
