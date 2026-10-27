@@ -1,10 +1,13 @@
 import time
 import json
+import os
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 TOKEN = "8996279782:AAEJ-n3vP4K9bts15GC0_htKMceRC4yHj8E"
 CHAT = "5124680786"
+DATA_FILE = "prices_cache.json"
 
 # لستة المنتجات المدمجة (التكييفات + الشاشات الحقيقية والصافية 100%)
 PRODUCTS = [
@@ -165,24 +168,45 @@ H = {
 }
 
 AR = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
-last_prices = {}
-is_first_run = True  # متغير لمعرفة هل هذه هي عملية البحث الأولى أم لا
+
+def load_data():
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_data(data):
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"خطأ في حفظ الملف: {e}")
+
+stored_data = load_data()
 
 def send(msg):
     u = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     try:
-        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown"}, timeout=10)
+        requests.post(u, json={"chat_id": CHAT, "text": msg, "parse_mode": "Markdown", "disable_web_page_preview": True}, timeout=10)
     except Exception as e:
         print(f"خطأ في إرسال رسالة التليجرام: {e}")
 
 def check_prices():
-    global last_prices, is_first_run
+    global stored_data
     print(f"\n[🔄] بدء فحص عدد {len(PRODUCTS)} منتج...")
     changes_count = 0
+    is_first_run_ever = len(stored_data) == 0
+    current_time_str = datetime.now().strftime("%d/%m/%Y %H:%M")
     
     for index, url in enumerate(PRODUCTS, 1):
         try:
-            response = requests.get(url, headers=H, timeout=15)
+            response = requests.get(url, headers=H, timeout=15, allow_redirects=True)
+            
+            # الحصول على الرابط الفعلي الحقيقي بعد أي إعادة توجيه من الموقع
+            actual_url = response.url
             
             if response.status_code != 200:
                 print(f"[{index}/{len(PRODUCTS)}] فشل فحص المنتج (كود الاستجابة: {response.status_code})")
@@ -192,7 +216,6 @@ def check_prices():
             current_price = None
             product_name = None
             
-            # 1. استخراج الاسم والسعر بدقة من بيانات الـ JSON-LD (عربي أو إنجليزي بدون أخطاء)
             for script in soup.find_all('script', type='application/ld+json'):
                 try:
                     data = json.loads(script.string)
@@ -217,12 +240,10 @@ def check_prices():
                 except:
                     pass
             
-            # Fallback للاسم لو لم يتم إيجاده في JSON-LD
             if not product_name:
                 h1 = soup.find('h1')
                 product_name = h1.get_text().strip() if h1 else "منتج بدون اسم"
             
-            # Fallback للسعر لو لم يتم إيجاده في JSON-LD
             if not current_price:
                 price_element = (
                     soup.find('span', {'class': 'price'}) or 
@@ -237,21 +258,68 @@ def check_prices():
                         current_price = float(price_str)
             
             if current_price:
-                # إذا كانت عملية الفحص الأولى، ابعت كل منتج تم فحصه
-                if is_first_run:
-                    initial_msg = f"🔍 **الفحص الأولي:**\n\n📦 **المنتج:** {product_name}\n💰 **السعر:** {current_price} ج.م\n🔗 [رابط المنتج]({url})"
-                    send(initial_msg)
-                
-                # مراقبة التغيرات في الدورات اللاحقة
-                elif url in last_prices:
-                    old_price = last_prices[url]
+                # استخدام الرابط الحقيقي للمنتج (actual_url) لضمان عدم التحويل للصفحة الرئيسية
+                product_link = actual_url if "kenzz.com/product" in actual_url or "kenzz.com/en/product" in actual_url else url
+
+                if url not in stored_data:
+                    stored_data[url] = {
+                        "name": product_name,
+                        "current_price": current_price,
+                        "history": [{"price": current_price, "time": current_time_str}]
+                    }
+                    
+                    msg = (
+                        f"✨ عرض شفاء ✨\n\n"
+                        f"🛒 {product_name}\n\n"
+                        f"💵 السعر الحالي: EGP {current_price}\n"
+                        f"💵 السعر السابق: EGP {current_price}\n"
+                        f"📊 متوسط الأسعار: EGP {current_price}\n"
+                        f"📉 نسبة الخصم: 0.0%\n\n"
+                        f"📜 تاريخ الأسعار:\n"
+                        f"➡️ EGP {current_price} – {current_time_str}\n\n"
+                        f"🛍️ سارع بالشراء!\n"
+                        f"🔗 {product_link}"
+                    )
+                    if is_first_run_ever:
+                        send(msg)
+                else:
+                    item_data = stored_data[url]
+                    old_price = item_data["current_price"]
+                    
                     if current_price != old_price:
-                        diff = current_price - old_price
-                        msg = f"🚨 **تغير في السعر!**\n\n📦 **المنتج:** {product_name}\n🔗 [رابط المنتج]({url})\n💰 السعر القديم: {old_price}\n🔥 السعر الجديد: {current_price}\n📊 الفرق: {diff}"
+                        prices_list = [h["price"] for h in item_data["history"]]
+                        prices_list.append(current_price)
+                        avg_price = round(sum(prices_list) / len(prices_list), 2)
+                        max_price = max(prices_list)
+                        
+                        discount_pct = 0.0
+                        if max_price > 0:
+                            discount_pct = round(((max_price - current_price) / max_price) * 100, 1)
+                        
+                        item_data["current_price"] = current_price
+                        item_data["name"] = product_name
+                        item_data["history"].append({"price": current_price, "time": current_time_str})
+                        
+                        history_text = ""
+                        for h in reversed(item_data["history"][-5:]):
+                            history_text += f"➡️ EGP {h['price']} – {h['time']}\n"
+                        
+                        msg = (
+                            f"✨ عرض شفاء ✨\n\n"
+                            f"🛒 {product_name}\n\n"
+                            f"💵 السعر الحالي: EGP {current_price}\n"
+                            f"💵 السعر السابق: EGP {old_price}\n"
+                            f"📊 متوسط الأسعار: EGP {avg_price}\n"
+                            f"📉 نسبة الخصم: %{discount_pct}\n"
+                            f"🔥 أقل سعر تاريخي!\n\n"
+                            f"📜 تاريخ الأسعار:\n"
+                            f"{history_text}\n"
+                            f"🛍️ سارع بالشراء!\n"
+                            f"🔗 {product_link}"
+                        )
                         send(msg)
                         changes_count += 1
                 
-                last_prices[url] = current_price
                 print(f"[{index}/{len(PRODUCTS)}] ✅ تم الفحص - {product_name} | السعر: {current_price}")
             else:
                 print(f"[{index}/{len(PRODUCTS)}] ⚠️ لم يتم العثور على السعر.")
@@ -261,23 +329,21 @@ def check_prices():
         except Exception as e:
             print(f"[{index}/{len(PRODUCTS)}] ❌ خطأ: {e}")
             
-    # انتهاء الفحص الأولي أو انتهاء الدورة الحالية
-    if is_first_run:
-        is_first_run = False
-        send("✅ **انتهى الفحص الأولي لجميع المنتجات بنجاح!**\nالبوت يعمل الآن في صمت ولن يزعجك إلا عند حدوث تغيير أو انتهاء كل دورة فحص.")
-        print("\n[✅] انتهى الفحص الأولي. البوت مستمر في المراقبة الصامتة...")
+    save_data(stored_data)
+    
+    if is_first_run_ever:
+        send("✅ **انتهى الفحص الأولي لجميع المنتجات بنجاح!**\nتم حفظ البيانات ولن يتم إزعاجك مجدداً إلا عند حدوث تغيير في الأسعار.")
+        print("\n[✅] انتهى الفحص الأولي وتم حفظ البيانات.")
     else:
-        # تقرير نهاية الدورة الصامتة
         if changes_count == 0:
-            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم فحص جميع المنتجات بنجاح، ولم يتم رصد أي تغيير في الأسعار حتى الان."
+            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم فحص جميع المنتجات بنجاح، ولم يتم رصد أي تغيير في الأسعار."
         else:
-            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم الانتهاء من الفحص ورصد عدد {changes_count} تغير في الأسعار وتم إرسال تنبيهات بها."
+            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم الانتهاء من الفحص ورصد عدد {changes_count} تغير في الأسعار."
         send(cycle_msg)
-        print("\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير. جاري الانتظار للدورة القادمة...")
+        print("\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير الصامت.")
 
 if __name__ == "__main__":
     print("البوت يعمل الآن ويقوم بمراقبة الأسعار...")
     while True:
         check_prices()
-        time.sleep(1800) # الفحص كل نصف ساعة
-
+        time.sleep(900) # الفحص كل ساعة
