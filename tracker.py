@@ -157,7 +157,7 @@ PRODUCTS = [
     "https://kenzz.com/en/product/Z9K4M3PK4CZB/Fresh-Smart-Tv-43-Inches-Fhd-Led-43Lf423Ce",
     "https://kenzz.com/product/D8HANESRB8UU/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-65-%D8%A8%D9%88%D8%B5%D8%A9-%D8%A7%D9%84%D8%B0%D9%83%D9%8A-4K-UHD-QLED-%D9%85%D8%B9-%D8%B1%D8%B3%D9%8A%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-65Q80CA",
     "https://kenzz.com/product/NPN84XL8VVWU/Q60D-%D8%AA%D9%84%D9%8A%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-2024-QLED-Tizen-OS-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-QA50Q60DAUXEG",
-    "https://kenzz.com/product/PEW6Y5KH9QPQ/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-75-%D8%A8%D9%88%D8%B5%D8%A9-QLED-4K-UHD-%D8%B1%D9%8A%D8%B3%D9%8A%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-75Q70DAUXEG",
+    "https://kenzz.com/product/PEW6Y5KH9QPQ/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-75-%D8%A8%D9%88%D8%B5%D8%A9-QLED-4K-UHD-%D8%B1%D9%8A%D8%B3%D9%85%D9%81%D8%B1-%D8%AF%D8%A7%D8%AE%D9%84%D9%8A-75Q70DAUXEG",
     "https://kenzz.com/product/VJAA64HRV7YW/%D8%AA%D9%84%D9%81%D8%B2%D9%8A%D9%88%D9%86-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%D8%AC-The-Frame-%D8%B3%D9%85%D8%A7%D8%B1%D8%AA-55-%D8%A8%D9%88%D8%B5%D8%A9-4K-LS03D-QLED"
 ]
 
@@ -196,16 +196,18 @@ def send(msg):
 
 def check_prices():
     global stored_data
+    
+    # رسالة بداية دورة البحث الجديدة
+    send("🔍 *بدأت أراقب ياجيمي المنتجات*")
     print(f"\n[🔄] بدء فحص عدد {len(PRODUCTS)} منتج...")
+    
     changes_count = 0
-    is_first_run_ever = len(stored_data) == 0
+    checked_count = 0
     current_time_str = datetime.now().strftime("%d/%m/%Y %H:%M")
     
     for index, url in enumerate(PRODUCTS, 1):
         try:
             response = requests.get(url, headers=H, timeout=15, allow_redirects=True)
-            
-            # الحصول على الرابط الفعلي الحقيقي بعد أي إعادة توجيه من الموقع
             actual_url = response.url
             
             if response.status_code != 200:
@@ -258,18 +260,20 @@ def check_prices():
                         current_price = float(price_str)
             
             if current_price:
-                # استخدام الرابط الحقيقي للمنتج (actual_url) لضمان عدم التحويل للصفحة الرئيسية
-                product_link = actual_url if "kenzz.com/product" in actual_url or "kenzz.com/en/product" in actual_url else url
-
-                if url not in stored_data:
+                checked_count += 1
+                product_link = actual_url if "/product/" in actual_url else url
+                is_new_product = url not in stored_data
+                
+                if is_new_product:
                     stored_data[url] = {
                         "name": product_name,
                         "current_price": current_price,
                         "history": [{"price": current_price, "time": current_time_str}]
                     }
                     
+                    # إرسال إشعار للمنتجات الجديدة لتتأكد من الروابط
                     msg = (
-                        f"✨ عرض شفاء ✨\n\n"
+                        f"✨ عرض كنز ✨\n\n"
                         f"🛒 {product_name}\n\n"
                         f"💵 السعر الحالي: EGP {current_price}\n"
                         f"💵 السعر السابق: EGP {current_price}\n"
@@ -280,8 +284,7 @@ def check_prices():
                         f"🛍️ سارع بالشراء!\n"
                         f"🔗 {product_link}"
                     )
-                    if is_first_run_ever:
-                        send(msg)
+                    send(msg)
                 else:
                     item_data = stored_data[url]
                     old_price = item_data["current_price"]
@@ -305,7 +308,7 @@ def check_prices():
                             history_text += f"➡️ EGP {h['price']} – {h['time']}\n"
                         
                         msg = (
-                            f"✨ عرض شفاء ✨\n\n"
+                            f"✨ عرض كنز ✨\n\n"
                             f"🛒 {product_name}\n\n"
                             f"💵 السعر الحالي: EGP {current_price}\n"
                             f"💵 السعر السابق: EGP {old_price}\n"
@@ -331,19 +334,17 @@ def check_prices():
             
     save_data(stored_data)
     
-    if is_first_run_ever:
-        send("✅ **انتهى الفحص الأولي لجميع المنتجات بنجاح!**\nتم حفظ البيانات ولن يتم إزعاجك مجدداً إلا عند حدوث تغيير في الأسعار.")
-        print("\n[✅] انتهى الفحص الأولي وتم حفظ البيانات.")
+    # تقرير نهاية الدورة
+    if changes_count == 0:
+        end_msg = f"خلصت يازميلي وملقتش اي تغيير في الأسعار 🤝\nتم فحص عدد {checked_count} منتج بنجاح."
     else:
-        if changes_count == 0:
-            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم فحص جميع المنتجات بنجاح، ولم يتم رصد أي تغيير في الأسعار."
-        else:
-            cycle_msg = f"🔄 **تقرير الدورة المكتملة:**\nتم الانتهاء من الفحص ورصد عدد {changes_count} تغير في الأسعار."
-        send(cycle_msg)
-        print("\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير الصامت.")
+        end_msg = f"خلصت يازميلي الفحص! تم فحص {checked_count} منتج، ورصد عدد {changes_count} تغير في الأسعار وإرسال تنبيهات بها 🚀"
+    
+    send(end_msg)
+    print(f"\n[⏳] انتهت الدورة الحالية وتم إرسال التقرير (تم فحص {checked_count} منتج).")
 
 if __name__ == "__main__":
     print("البوت يعمل الآن ويقوم بمراقبة الأسعار...")
     while True:
         check_prices()
-        time.sleep(900) # الفحص كل ساعة
+        time.sleep(900) # الفحص كل ساعة (يمكنك تعديلها لـ 900 لو أردت ربع ساعة)
